@@ -2,3 +2,7 @@
 Winglet-BG95-backups/
 
 fp-info-cache
+
+outputs/
+
+scripts/__pycache__/
