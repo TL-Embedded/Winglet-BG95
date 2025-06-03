@@ -1,29 +1,48 @@
 import subprocess
-import os, sys, shutil
-import bom
+import os, sys, shutil, platform, json
+import bom, image, pdfmerge
 
-# You may need to edit this
-KICAD_ROOT = "C:/Program Files/KiCad/8.0/bin"
+SCRIPT_VERSION = "v1.17"
+KICAD_VERSION = "9.0"
 
-KICAD_CLI = os.path.join(KICAD_ROOT, "kicad-cli.exe")
-KICAD_PYTHON = os.path.join(KICAD_ROOT, "python.exe")
-IBOM_SCRIPT = os.path.expandvars("%USERPROFILE%/Documents/KiCad/8.0/3rdparty/plugins/org_openscopeproject_InteractiveHtmlBom/generate_interactive_bom.py")
+if platform.platform().startswith("Windows"):
+    # You may need to edit this
+    KICAD_ROOT = f"C:/Program Files/KiCad/{KICAD_VERSION}/bin"
+    KICAD_CLI = os.path.join(KICAD_ROOT, "kicad-cli.exe")
+    KICAD_PYTHON = os.path.join(KICAD_ROOT, "python.exe")
+    IBOM_SCRIPT = os.path.expandvars(f"%USERPROFILE%/Documents/KiCad/{KICAD_VERSION}/3rdparty/plugins/org_openscopeproject_InteractiveHtmlBom/generate_interactive_bom.py")
+else:
+    KICAD_CLI = "kicad-cli"
+    KICAD_PYTHON = "python3"
+    IBOM_SCRIPT = os.path.expanduser(f"~/.local/share/kicad/{KICAD_VERSION}/3rdparty/plugins/org_openscopeproject_InteractiveHtmlBom/generate_interactive_bom.py")
 
-SCRIPT_VERSION = "v1.6"
 
 def get_layer_names(layers: int) -> list[str]:
-    names = ["F.SilkS", "F.Paste", "F.Mask", "F.Cu", "B.Cu", "B.Mask", "B.Paste", "B.SilkS", "Edge.Cuts"]
+    names = ["F.Fab", "F.SilkS", "F.Paste", "F.Mask", "F.Cu", "B.Cu", "B.Mask", "B.Paste", "B.SilkS", "B.Fab", "Edge.Cuts"]
     if layers > 2:
         for i in range(layers - 2):
             names.append(f"In{i + 1}.Cu")
     return names
 
-def run_command(args: list[str]):
+def run_command(args: list[str], silent: bool = False) -> str:
     try:
-        return subprocess.check_output(args).decode('ascii').strip()
+        stderr = subprocess.DEVNULL if silent else None
+        return subprocess.check_output(args, stderr=stderr).decode().strip()
     except subprocess.CalledProcessError as e:
-        print(e.stdout.decode('ascii'))
-        raise e
+        print_color(f"Command failed with code {e.returncode}!", "r")
+        print_color(' '.join(args), "r")
+        print_color(e.stdout.decode().strip(), "r")
+        print("Aborting...")
+        exit()
+
+def print_color(text: str, color: str = "r"):
+    colors = {
+        "r": "\033[91m",
+        "g": "\033[92m",
+        "y": "\033[93m",
+        "b": "\033[94m",
+    }
+    print(colors[color] + text + "\033[0m")
 
 def clean_directory(dir: str):
     # Remove output directory (and its contents) and recreate it
@@ -31,13 +50,67 @@ def clean_directory(dir: str):
         shutil.rmtree(dir)
     os.makedirs(dir)
 
+def report_errors(title: str, errors: list[dict[str, str]]) -> dict[str, int]:
+    groups = {}
+    for error in errors:
+        severity = error["severity"]
+        if severity not in groups:
+            groups[severity] = 0
+        groups[severity] += 1
+
+    if groups:
+        msg = f"{title}: " + ", ".join([f"{count} {type}s" for type, count in groups.items()])
+        color = "r" if "error" in groups else "y"
+        print_color(msg, color)
+
+
+def run_sch_erc(input_sch: str, output_dir: str):
+    # Run schematic ERC check
+    outfile = os.path.join(output_dir, "sch-erc.json")
+    run_command([
+        KICAD_CLI, "sch", "erc",
+        input_sch,
+        "--output", outfile,
+        "--format", "json",
+        "--severity-warning",
+        "--severity-error",
+    ])
+    
+    with open(outfile, "r") as f:
+        report = json.load(f)
+        report_errors("ERC report", sum((sheet["violations"] for sheet in report["sheets"]),[]))
+
+    os.remove(outfile)
+
+def run_pcb_drc(input_pcb: str, output_dir: str):
+    # Run PCB DRC check
+    outfile = os.path.join(output_dir, "pcb-drc.json")
+    run_command([
+        KICAD_CLI, "pcb", "drc",
+        input_pcb,
+        "--output", outfile,
+        "--format", "json",
+        "--severity-warning",
+        "--severity-error",
+        "--schematic-parity",
+    ])
+    
+    with open(outfile, "r") as f:
+        report = json.load(f)
+        report_errors("Schematic parity", report["schematic_parity"])
+        report_errors("Unconnected items", report["unconnected_items"])
+        report_errors("DRC report", report["violations"])
+
+    os.remove(outfile)
+
+
 def export_sch_pdf(input_sch: str, output_pdf: str):
     # Create PDF from schematic
     run_command([
         KICAD_CLI, "sch", "export", "pdf",
         input_sch,
         "--output", output_pdf,
-        ])
+    ])
 
 def export_sch_bom(input_sch: str, output_csv: str) -> list[str]:
     os.makedirs( os.path.dirname(output_csv) )
@@ -110,9 +183,15 @@ def export_pcb_step(input_pcb: str, output_file: str):
         KICAD_CLI, "pcb", "export", "step",
         input_pcb,
         "--output", output_file,
+        "--no-dnp",
     ])
 
 def export_pcb_ibom(input_pcb: str, output_file: str, dnf_list: list[str] = []):
+
+    if not os.path.exists(IBOM_SCRIPT):
+        print_color(f"IBOM plugin not found", "y")
+        return
+
     os.environ['INTERACTIVE_HTML_BOM_NO_DISPLAY'] = "1"
     run_command([
         KICAD_PYTHON, IBOM_SCRIPT, input_pcb,
@@ -124,15 +203,78 @@ def export_pcb_ibom(input_pcb: str, output_file: str, dnf_list: list[str] = []):
         "--include-nets",
         "--name-format", os.path.basename(output_file).replace(".html", ""),
         "--blacklist", ",".join(dnf_list)
-    ])
+    ], silent=True)
 
 def export_pcb_image(input_pcb: str, output_file: str):
-    print("Currently image export is not supported")
-    template_path = os.path.join(os.path.dirname(__file__), "template.png")
-    shutil.copyfile(template_path, output_file)
     run_command([
-        "mspaint", output_file
+        KICAD_CLI, "pcb", "render",
+        input_pcb,
+        "--output", output_file,
+        "--quality", "user",
+        "--perspective",
+        "--zoom", "0.9",
+        "--width", "2000",
+        "--height", "2000",
+        "--background", "transparent",
     ])
+    image.crop_image(output_file, output_file)
+
+def export_pcb_drawings(input_pcb: str, output_file: str, layers: int):
+
+    if not pdfmerge.get_backend():
+        print_color("No PDF merging backend available. Skipping PCB drawings", "w")
+        return
+
+    tmpdir = os.path.join(os.path.dirname(output_file), "pdf-tmp")
+    os.makedirs(tmpdir, exist_ok=True)
+
+    plots = [
+        {
+            "name": "Top Fabrication",
+            "layers": ["F.Fab", "Edge.Cuts"],
+        },
+        {
+            "name": "Bottom Fabrication",
+            "layers": ["B.Fab", "Edge.Cuts"],
+        },
+        {
+            "name": "Top",
+            "layers": ["F.Cu", "F.Paste", "F.SilkS", "Edge.Cuts"],
+        },
+        {
+            "name": "Bottom",
+            "layers": ["B.Cu", "B.Paste", "B.SilkS", "Edge.Cuts"],
+        },
+    ]
+
+    if layers > 2:
+        # Put the internal layers between the top and bottom layers
+        bottom = plots.pop(-1)
+        for i in range(layers - 2):
+            plots.append({
+                "name": f"Inner Layer {i + 1}",
+                "layers": [f"In{i + 1}.Cu", "Edge.Cuts"]
+            })
+        plots.append(bottom)
+
+    for plot in plots:
+        result = run_command([
+            KICAD_CLI, "pcb", "export", "pdf",
+            input_pcb,
+            "--layers", plot["layers"][0],
+            "--common-layers", ",".join(plot["layers"][1:]),
+            "--output", tmpdir,
+            "--include-border-title",
+            "--drill-shape-opt", "2",
+            "--define-var", f"LAYER_NAME={plot['name']}",
+            "--mode-multipage",
+        ])
+        # Result format: "Plotted to 'outputs/pdf-tmp/pcb_name-F_Fab.pdf'."
+        plot["filename"] = result.split("'")[-2]
+
+    pages = [ plot["filename"] for plot in plots ]
+    pdfmerge.merge_pdf(pages, output_file)
+    shutil.rmtree(tmpdir)
 
 def zip_files(input_path: str, output_file: str):
     run_command([
@@ -155,11 +297,17 @@ if __name__ == "__main__":
 
     clean_directory(OUTPUT_DIR)
 
+    print("Running schematic ERC")
+    run_sch_erc(INPUT_SCH, OUTPUT_DIR)
+
     print("Generating schematic PDF")
-    export_sch_pdf(INPUT_SCH, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".pdf"))
+    export_sch_pdf(INPUT_SCH, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".schematics.pdf"))
+
+    print("Running PCB DRC")
+    run_pcb_drc(INPUT_PCB, OUTPUT_DIR)
 
     print("Generating BOM")
-    dnf_list = export_sch_bom(INPUT_SCH, os.path.join(OUTPUT_DIR, "Assembly" , OUTPUT_NAME + "_bom.csv"))
+    dnf_list = export_sch_bom(INPUT_SCH, os.path.join(OUTPUT_DIR, "Assembly" , OUTPUT_NAME + ".bom.csv"))
 
     print("Generating IBOM")
     export_pcb_ibom(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".ibom.html"), dnf_list)
@@ -171,9 +319,12 @@ if __name__ == "__main__":
     export_pcb_ncdrill(INPUT_PCB, os.path.join(OUTPUT_DIR, "NC Drill"))
 
     print("Generating position report")
-    export_pcb_pos(INPUT_PCB, os.path.join(OUTPUT_DIR, "Assembly", OUTPUT_NAME + "_pos.csv"))
+    export_pcb_pos(INPUT_PCB, os.path.join(OUTPUT_DIR, "Assembly", OUTPUT_NAME + ".pos.csv"))
 
-    print("Generating PCB Image")
+    print("Generating PCB drawings")
+    export_pcb_drawings(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".drawings.pdf"), BOARD_LAYERS)
+
+    print("Generating PCB render")
     export_pcb_image(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".png"))
 
     print("Generating step file")
