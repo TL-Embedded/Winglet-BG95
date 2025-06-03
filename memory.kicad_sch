@@ -1,133 +1,20 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(uuid "f092badf-977e-4469-a255-599d0894f699")
 	(paper "A4")
+	(title_block
+		(title "Winglet BG95")
+		(date "2025-06-03")
+		(rev "v1.1")
+		(company "TL Embedded")
+	)
 	(lib_symbols
-		(symbol "+3V3_1"
-			(power)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR01"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "+3V3_1"
-				(at 0 3.81 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"+3V3\""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+3V3_1_0_1"
-				(polyline
-					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "+3V3_1_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0) hide
-					(name "+VDDIO"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "C_Capacitor:C_0603"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 1.016)
 			)
@@ -188,10 +75,10 @@
 			(symbol "C_0603_1_1"
 				(polyline
 					(pts
-						(xy -1.524 -0.508) (xy 1.524 -0.508)
+						(xy -1.524 0.508) (xy 1.524 0.508)
 					)
 					(stroke
-						(width 0.3302)
+						(width 0.3048)
 						(type default)
 					)
 					(fill
@@ -200,10 +87,10 @@
 				)
 				(polyline
 					(pts
-						(xy -1.524 0.508) (xy 1.524 0.508)
+						(xy -1.524 -0.508) (xy 1.524 -0.508)
 					)
 					(stroke
-						(width 0.3048)
+						(width 0.3302)
 						(type default)
 					)
 					(fill
@@ -247,6 +134,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "J_Connector:1042240820"
 			(exclude_from_sim no)
@@ -287,7 +175,7 @@
 				)
 			)
 			(property "Description" "NANOSIM SOCKET 1.11H P/PULL TYPE"
-				(at 0 0 0)
+				(at 8.382 -8.636 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -319,7 +207,7 @@
 				)
 				(polyline
 					(pts
-						(xy 7.62 6.35) (xy 7.62 5.08)
+						(xy 6.35 5.08) (xy 10.16 5.08) (xy 10.16 9.525) (xy 6.35 9.525) (xy 6.35 5.08)
 					)
 					(stroke
 						(width 0)
@@ -355,7 +243,7 @@
 				)
 				(polyline
 					(pts
-						(xy 8.89 6.35) (xy 8.89 5.08)
+						(xy 7.62 6.35) (xy 7.62 5.08)
 					)
 					(stroke
 						(width 0)
@@ -379,7 +267,7 @@
 				)
 				(polyline
 					(pts
-						(xy 6.35 5.08) (xy 10.16 5.08) (xy 10.16 9.525) (xy 6.35 9.525) (xy 6.35 5.08)
+						(xy 8.89 6.35) (xy 8.89 5.08)
 					)
 					(stroke
 						(width 0)
@@ -432,6 +320,24 @@
 						)
 					)
 				)
+				(pin power_in line
+					(at -2.54 12.7 0)
+					(length 2.54)
+					(name "VPP"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "C6"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
 				(pin input line
 					(at -2.54 10.16 0)
 					(length 2.54)
@@ -468,42 +374,6 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at -2.54 2.54 0)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "C5"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -2.54 12.7 0)
-					(length 2.54)
-					(name "VPP"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "C6"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
 				(pin bidirectional line
 					(at -2.54 5.08 0)
 					(length 2.54)
@@ -523,16 +393,16 @@
 					)
 				)
 				(pin power_in line
-					(at 19.05 2.54 180)
+					(at -2.54 2.54 0)
 					(length 2.54)
-					(name "SHIELD"
+					(name "GND"
 						(effects
 							(font
 								(size 1.016 1.016)
 							)
 						)
 					)
-					(number "S"
+					(number "C5"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -576,10 +446,31 @@
 						)
 					)
 				)
+				(pin power_in line
+					(at 19.05 2.54 180)
+					(length 2.54)
+					(name "SHIELD"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "S"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "R_Resistor:R_0603"
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 1.016)
 			)
@@ -640,7 +531,7 @@
 			(symbol "R_0603_1_1"
 				(polyline
 					(pts
-						(xy 0 0) (xy 1.016 -0.381) (xy 0 -0.762) (xy -1.016 -1.143) (xy 0 -1.524)
+						(xy 0 1.524) (xy 1.016 1.143) (xy 0 0.762) (xy -1.016 0.381) (xy 0 0)
 					)
 					(stroke
 						(width 0)
@@ -652,7 +543,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 1.524) (xy 1.016 1.143) (xy 0 0.762) (xy -1.016 0.381) (xy 0 0)
+						(xy 0 0) (xy 1.016 -0.381) (xy 0 -0.762) (xy -1.016 -1.143) (xy 0 -1.524)
 					)
 					(stroke
 						(width 0)
@@ -699,6 +590,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "U_Memory:24AA01T-I/OT"
 			(exclude_from_sim no)
@@ -787,24 +679,6 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at 8.89 2.54 180)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
 				(pin bidirectional line
 					(at -8.89 7.62 0)
 					(length 2.54)
@@ -816,24 +690,6 @@
 						)
 					)
 					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 8.89 10.16 180)
-					(length 2.54)
-					(name "VCC"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -859,7 +715,44 @@
 						)
 					)
 				)
+				(pin power_in line
+					(at 8.89 10.16 180)
+					(length 2.54)
+					(name "VCC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 8.89 2.54 180)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "U_Memory:MFF2-SIM"
 			(exclude_from_sim no)
@@ -920,17 +813,17 @@
 						(type background)
 					)
 				)
-				(pin power_in line
-					(at 15.24 5.08 180)
+				(pin input line
+					(at -2.54 15.24 0)
 					(length 2.54)
-					(name "GND"
+					(name "~{RST}"
 						(effects
 							(font
 								(size 1.016 1.016)
 							)
 						)
 					)
-					(number "1"
+					(number "7"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -938,17 +831,17 @@
 						)
 					)
 				)
-				(pin no_connect line
-					(at 15.24 12.7 180)
+				(pin input line
+					(at -2.54 12.7 0)
 					(length 2.54)
-					(name "NC"
+					(name "CLK"
 						(effects
 							(font
 								(size 1.016 1.016)
 							)
 						)
 					)
-					(number "2"
+					(number "6"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -967,6 +860,42 @@
 						)
 					)
 					(number "3"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 15.24 15.24 180)
+					(length 2.54)
+					(name "VCC"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin no_connect line
+					(at 15.24 12.7 180)
+					(length 2.54)
+					(name "NC"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -1010,53 +939,17 @@
 						)
 					)
 				)
-				(pin input line
-					(at -2.54 12.7 0)
-					(length 2.54)
-					(name "CLK"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -2.54 15.24 0)
-					(length 2.54)
-					(name "~{RST}"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
 				(pin power_in line
-					(at 15.24 15.24 180)
+					(at 15.24 5.08 180)
 					(length 2.54)
-					(name "VCC"
+					(name "GND"
 						(effects
 							(font
 								(size 1.016 1.016)
 							)
 						)
 					)
-					(number "8"
+					(number "1"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -1083,11 +976,16 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "power:GND"
 			(power)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 0)
+				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1162,8 +1060,8 @@
 			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 270)
-					(length 0) hide
-					(name "GND"
+					(length 0)
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1179,7 +1077,173 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
+		(symbol "power:VDD"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "VDD"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"VDD\""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "VDD_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "VDD_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text_box "2 SIM card options:\n - Nano SIM (4FF)\n - Integrated SIM (MFF2)"
+		(exclude_from_sim no)
+		(at 139.7 63.5 0)
+		(size 34.29 10.16)
+		(margins 0.9525 0.9525 0.9525 0.9525)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "6754788b-c6cc-4669-a863-757dae5f3c9c")
+	)
+	(text_box "EEPROM to enable modem detection"
+		(exclude_from_sim no)
+		(at 139.7 127 0)
+		(size 34.29 10.16)
+		(margins 0.9525 0.9525 0.9525 0.9525)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "7da10672-768a-4b0e-8722-8029083d401f")
 	)
 	(junction
 		(at 85.09 54.61)
@@ -1851,48 +1915,9 @@
 		)
 		(uuid "f45cd1ee-ea01-45ef-85a7-bacbcf6b6493")
 	)
-	(text_box "2 SIM card options:\n - Nano SIM (4FF)\n - Integrated SIM (MFF2)"
-		(exclude_from_sim no)
-		(at 139.7 63.5 0)
-		(size 34.29 10.16)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(fill
-			(type none)
-		)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "6754788b-c6cc-4669-a863-757dae5f3c9c")
-	)
-	(text_box "EEPROM to enable modem detection"
-		(exclude_from_sim no)
-		(at 139.7 127 0)
-		(size 34.29 10.16)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(fill
-			(type none)
-		)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "7da10672-768a-4b0e-8722-8029083d401f")
-	)
 	(hierarchical_label "USIM_RST"
 		(shape input)
 		(at 92.71 93.98 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1904,7 +1929,6 @@
 	(hierarchical_label "USIM_DATA"
 		(shape bidirectional)
 		(at 92.71 99.06 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1916,7 +1940,6 @@
 	(hierarchical_label "USIM_VDD"
 		(shape input)
 		(at 60.96 38.1 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1928,7 +1951,6 @@
 	(hierarchical_label "USIM_RST"
 		(shape input)
 		(at 60.96 49.53 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1940,7 +1962,6 @@
 	(hierarchical_label "USIM_VDD"
 		(shape input)
 		(at 92.71 82.55 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1952,7 +1973,6 @@
 	(hierarchical_label "I2C_SDA"
 		(shape bidirectional)
 		(at 92.71 130.81 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1964,7 +1984,6 @@
 	(hierarchical_label "USIM_DATA"
 		(shape bidirectional)
 		(at 60.96 54.61 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1976,7 +1995,6 @@
 	(hierarchical_label "I2C_SCL"
 		(shape bidirectional)
 		(at 92.71 128.27 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1988,7 +2006,6 @@
 	(hierarchical_label "USIM_CLK"
 		(shape input)
 		(at 92.71 96.52 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2000,7 +2017,6 @@
 	(hierarchical_label "USIM_CLK"
 		(shape input)
 		(at 60.96 52.07 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2011,16 +2027,16 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 127 146.05 0)
+		(at 127 107.95 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "002bbfbf-2578-41d0-b100-5038e8dbc89a")
+		(uuid "0c2e8b6b-8839-494b-b4a5-378ed60967ea")
 		(property "Reference" "#PWR019"
-			(at 127 152.4 0)
+			(at 127 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2029,7 +2045,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 127 151.13 0)
+			(at 127 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2037,7 +2053,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 127 146.05 0)
+			(at 127 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2046,7 +2062,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 127 146.05 0)
+			(at 127 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2054,8 +2070,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 127 146.05 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 127 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2064,7 +2080,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "40502419-864c-41a8-aea3-329909707616")
+			(uuid "981ba010-6c6c-44c3-b5e7-f66bfa360f6c")
 		)
 		(instances
 			(project "Winglet-BG95"
@@ -2173,7 +2189,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "390e3a0a-939e-487f-9139-7eb970cc3962")
-		(property "Reference" "C11"
+		(property "Reference" "C14"
 			(at 129.54 130.1813 0)
 			(effects
 				(font
@@ -2236,23 +2252,24 @@
 		(instances
 			(project "Winglet-BG95"
 				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "C11")
+					(reference "C14")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 127 68.58 0)
+		(lib_id "power:VDD")
+		(at 127 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "4755f803-a7c7-4f91-b223-ec168324ef6c")
-		(property "Reference" "#PWR016"
-			(at 127 74.93 0)
+		(fields_autoplaced yes)
+		(uuid "43c42d39-4cb0-4f5d-8d51-3b901d121411")
+		(property "Reference" "#PWR020"
+			(at 127 130.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2260,8 +2277,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "GND"
-			(at 127 72.39 0)
+		(property "Value" "+VDDIO"
+			(at 127 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2269,7 +2286,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 127 68.58 0)
+			(at 127 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2278,7 +2295,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 127 68.58 0)
+			(at 127 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2286,8 +2303,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 127 68.58 0)
+		(property "Description" "Power symbol creates a global label with name \"VDD\""
+			(at 127 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2296,12 +2313,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "243957e9-d8bd-477c-8bd1-9619cf35a4a5")
+			(uuid "ded13dae-1b36-4bfb-bcc9-5e927409583c")
 		)
 		(instances
 			(project "Winglet-BG95"
 				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "#PWR016")
+					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -2317,7 +2334,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4981c072-ad73-45df-a352-f6aa624d455a")
-		(property "Reference" "C15"
+		(property "Reference" "C10"
 			(at 77.47 59.0612 0)
 			(effects
 				(font
@@ -2380,7 +2397,7 @@
 		(instances
 			(project "Winglet-BG95"
 				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "C15")
+					(reference "C10")
 					(unit 1)
 				)
 			)
@@ -2396,7 +2413,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6102e914-c3f1-4894-9321-9d874b2a466a")
-		(property "Reference" "C9"
+		(property "Reference" "C12"
 			(at 129.54 48.9013 0)
 			(effects
 				(font
@@ -2459,7 +2476,7 @@
 		(instances
 			(project "Winglet-BG95"
 				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "C9")
+					(reference "C12")
 					(unit 1)
 				)
 			)
@@ -2467,15 +2484,16 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 127 107.95 0)
+		(at 127 146.05 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "618cfee8-a213-4c04-86df-f6b3540df18b")
-		(property "Reference" "#PWR017"
-			(at 127 114.3 0)
+		(fields_autoplaced yes)
+		(uuid "8fcfc4b1-50a4-42e9-a296-9f3467e2c933")
+		(property "Reference" "#PWR021"
+			(at 127 152.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2484,7 +2502,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 127 111.76 0)
+			(at 127 151.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2492,7 +2510,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 127 107.95 0)
+			(at 127 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2501,7 +2519,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 127 107.95 0)
+			(at 127 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2509,8 +2527,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 127 107.95 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 127 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2519,12 +2537,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "2b8a27bf-ffc0-4652-93a2-847cf82a12f3")
+			(uuid "bfc34c85-d14a-4625-a72f-9fc3de672c21")
 		)
 		(instances
 			(project "Winglet-BG95"
 				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "#PWR017")
+					(reference "#PWR021")
 					(unit 1)
 				)
 			)
@@ -2540,7 +2558,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9d2cfae8-5bba-4eac-b8ea-948d715a6a38")
-		(property "Reference" "C16"
+		(property "Reference" "C9"
 			(at 67.31 59.0612 0)
 			(effects
 				(font
@@ -2603,7 +2621,7 @@
 		(instances
 			(project "Winglet-BG95"
 				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "C16")
+					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -2698,7 +2716,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "beeabc1a-992b-415c-bd0d-7c629bbca7fa")
-		(property "Reference" "C14"
+		(property "Reference" "C11"
 			(at 87.63 59.0612 0)
 			(effects
 				(font
@@ -2761,7 +2779,73 @@
 		(instances
 			(project "Winglet-BG95"
 				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "C14")
+					(reference "C11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 127 68.58 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c0760caf-a9b2-43d4-a49f-19ac1e04c16b")
+		(property "Reference" "#PWR018"
+			(at 127 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 127 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 127 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 127 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 127 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fb6cc075-84d6-4f9a-bc36-971c62343b84")
+		)
+		(instances
+			(project "Winglet-BG95"
+				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -2852,73 +2936,6 @@
 		)
 	)
 	(symbol
-		(lib_name "+3V3_1")
-		(lib_id "power:+3V3")
-		(at 127 127 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "ec08d062-def6-4342-ab41-e319aaa7201d")
-		(property "Reference" "#PWR018"
-			(at 127 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+VDDIO"
-			(at 127 123.19 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 127 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 127 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 127 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d82c1d83-b4b5-4672-91e1-e7dfb4d93e4c")
-		)
-		(instances
-			(project "Winglet-BG95"
-				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "#PWR018")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "C_Capacitor:C_0603")
 		(at 127 100.33 0)
 		(unit 1)
@@ -2928,7 +2945,7 @@
 		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "f7e369c4-4790-4419-a06b-f4e93ed41afd")
-		(property "Reference" "C10"
+		(property "Reference" "C13"
 			(at 129.54 98.4313 0)
 			(effects
 				(font
@@ -2991,7 +3008,7 @@
 		(instances
 			(project "Winglet-BG95"
 				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "C10")
+					(reference "C13")
 					(unit 1)
 				)
 			)
@@ -3040,7 +3057,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "NANOSIM SOCKET 1.11H P/PULL TYPE"
 			(at 101.6 59.69 0)
 			(effects
 				(font
