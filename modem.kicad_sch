@@ -261,6 +261,129 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "2337019-1_1"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "2337019-1"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "J_Connector:U.FL"
+				(at 0 -11.43 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Specification+Or+Standard%7F108-140209%7FA%7Fpdf%7FEnglish%7FENG_SS_108-140209_A.pdf%7F2337019-1"
+				(at 0 -13.97 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "UMCC MICRO-COAX RECEPTACLE, GEN"
+				(at -0.254 -16.51 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "u.fl"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "2337019-1_1_0_0"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 0)
+					(radius 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "2337019-1_1_1_0"
+				(pin passive line
+					(at 0 -5.08 90)
+					(length 2.54)
+					(name "SHIELD"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "S"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "SIGNAL"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "C_Capacitor:C_0603"
 			(pin_numbers
 				(hide yes)
@@ -635,7 +758,7 @@
 					)
 				)
 			)
-			(property "Footprint" "J_Connector:A-1JB"
+			(property "Footprint" "J_Connector:U.FL"
 				(at 0 -11.43 0)
 				(effects
 					(font
@@ -4775,6 +4898,7 @@
 		(uuid "f634a8d2-066d-4982-bbad-223d5001a489")
 	)
 	(symbol
+		(lib_name "2337019-1_1")
 		(lib_id "J_Connector:2337019-1")
 		(at 125.73 30.48 0)
 		(mirror y)
@@ -4801,7 +4925,7 @@
 				)
 			)
 		)
-		(property "Footprint" "J_Connector:A-1JB"
+		(property "Footprint" "J_Connector:U.FL"
 			(at 125.73 41.91 0)
 			(effects
 				(font
@@ -4928,7 +5052,7 @@
 				)
 			)
 		)
-		(property "Value" "BG95MxLA"
+		(property "Value" "BG95M1LA"
 			(at 232.41 34.29 0)
 			(effects
 				(font
@@ -6503,7 +6627,7 @@
 				)
 			)
 		)
-		(property "Footprint" "J_Connector:A-1JB"
+		(property "Footprint" "J_Connector:U.FL"
 			(at 138.43 41.91 0)
 			(effects
 				(font
@@ -6796,7 +6920,7 @@
 				)
 			)
 		)
-		(property "Value" "BG95MxLA"
+		(property "Value" "BG95M1LA"
 			(at 83.82 35.56 0)
 			(effects
 				(font

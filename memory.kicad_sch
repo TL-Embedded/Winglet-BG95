@@ -136,7 +136,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "J_Connector:1042240820"
+		(symbol "J_Connector:NSIM-16-B"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -148,7 +148,7 @@
 					)
 				)
 			)
-			(property "Value" "1042240820"
+			(property "Value" "NSIM-16-B"
 				(at 7.62 -1.27 0)
 				(effects
 					(font
@@ -156,7 +156,7 @@
 					)
 				)
 			)
-			(property "Footprint" "J_Connector:1042240820"
+			(property "Footprint" "J_Connector:NSIM-16-B"
 				(at 8.89 -6.35 0)
 				(effects
 					(font
@@ -165,8 +165,8 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" "https://www.molex.com/content/dam/molex/molex-dot-com/products/automated/en-us/salesdrawingpdf/104/104224/1042240820_sd.pdf"
-				(at -1.905 -3.81 0)
+			(property "Datasheet" "https://www.sameskydevices.com/product/resource/digikeypdf/nsim-16-b.pdf"
+				(at -2.54 -3.81 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -174,8 +174,8 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "NANOSIM SOCKET 1.11H P/PULL TYPE"
-				(at 8.382 -8.636 0)
+			(property "Description" "CARD CONNECTOR, NANO SIM, PUSH I"
+				(at 7.874 -8.89 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -183,7 +183,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "USIM 4FF"
+			(property "ki_keywords" "USIM 3FF"
 				(at 0 0 0)
 				(effects
 					(font
@@ -192,7 +192,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "1042240820_0_1"
+			(symbol "NSIM-16-B_0_1"
 				(polyline
 					(pts
 						(xy 6.35 6.35) (xy 10.16 6.35)
@@ -290,7 +290,7 @@
 					)
 				)
 			)
-			(symbol "1042240820_1_0"
+			(symbol "NSIM-16-B_1_0"
 				(rectangle
 					(start 0 17.78)
 					(end 16.51 0)
@@ -403,42 +403,6 @@
 						)
 					)
 					(number "C5"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at 19.05 15.24 180)
-					(length 2.54)
-					(name "NC"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "X1"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-				)
-				(pin no_connect line
-					(at 19.05 12.7 180)
-					(length 2.54)
-					(name "NC"
-						(effects
-							(font
-								(size 1.016 1.016)
-							)
-						)
-					)
-					(number "X2"
 						(effects
 							(font
 								(size 1.016 1.016)
@@ -2936,6 +2900,88 @@
 		)
 	)
 	(symbol
+		(lib_id "J_Connector:NSIM-16-B")
+		(at 101.6 59.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f14c8c96-cc26-465e-9010-51ca58931e04")
+		(property "Reference" "J3"
+			(at 102.87 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "NSIM-16-B"
+			(at 109.22 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "J_Connector:NSIM-16-B"
+			(at 110.49 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.sameskydevices.com/product/resource/digikeypdf/nsim-16-b.pdf"
+			(at 99.06 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "CARD CONNECTOR, NANO SIM, PUSH I"
+			(at 109.474 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "S"
+			(uuid "11de4e7a-e16c-45ea-b50a-0b6d6aeb9398")
+		)
+		(pin "C2"
+			(uuid "cd54c557-eddf-41c3-b879-23ea4213ef62")
+		)
+		(pin "C6"
+			(uuid "17c238ec-3279-457e-917b-75626ccf6f98")
+		)
+		(pin "C1"
+			(uuid "65e9fc24-a650-4c89-92c6-fc4c9c696ba0")
+		)
+		(pin "C3"
+			(uuid "79041629-d7bc-42d9-8dfb-f398a0cac1d6")
+		)
+		(pin "C5"
+			(uuid "474ff106-5700-4621-abdc-8d9e64557745")
+		)
+		(pin "C7"
+			(uuid "0ca49c61-01c3-4871-8009-e5df394a5b5d")
+		)
+		(instances
+			(project ""
+				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "C_Capacitor:C_0603")
 		(at 127 100.33 0)
 		(unit 1)
@@ -3009,94 +3055,6 @@
 			(project "Winglet-BG95"
 				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
 					(reference "C13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "J_Connector:1042240820")
-		(at 101.6 59.69 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "feccc460-dbe4-4901-8ef7-6656c705ae9e")
-		(property "Reference" "J3"
-			(at 102.87 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1042240820"
-			(at 109.22 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "J_Connector:1042240820"
-			(at 110.49 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.molex.com/content/dam/molex/molex-dot-com/products/automated/en-us/salesdrawingpdf/104/104224/1042240820_sd.pdf"
-			(at 99.695 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "NANOSIM SOCKET 1.11H P/PULL TYPE"
-			(at 101.6 59.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "C1"
-			(uuid "1f422460-5213-452a-afc6-ee4f856aabad")
-		)
-		(pin "C2"
-			(uuid "d5d648cb-9e97-4000-b068-217ed6ef8577")
-		)
-		(pin "C3"
-			(uuid "553d2568-049a-41b5-a82a-694ac2ef2d08")
-		)
-		(pin "C5"
-			(uuid "e556624b-33fa-47df-ab03-cc6de8070e0f")
-		)
-		(pin "C6"
-			(uuid "5317dc6f-85db-4311-87ee-f4365511cc52")
-		)
-		(pin "C7"
-			(uuid "7c519aa9-2aaf-4c1f-9130-d1c32b8b2d4f")
-		)
-		(pin "S"
-			(uuid "860f9ee5-1109-4ce6-a17d-ba827f4b333a")
-		)
-		(pin "X1"
-			(uuid "6479e91f-4d64-4be3-a262-a9f7449a106c")
-		)
-		(pin "X2"
-			(uuid "77ecb90d-5f92-459f-8463-39a34b5bd35c")
-		)
-		(instances
-			(project "Winglet-BG95"
-				(path "/332623d6-c22a-48da-966b-0d541566aa2d/f3f940f5-dcec-4792-bd6b-0fb823198a56"
-					(reference "J3")
 					(unit 1)
 				)
 			)
