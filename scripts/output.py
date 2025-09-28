@@ -1,8 +1,8 @@
 import subprocess
-import os, sys, shutil, platform, json
-import bom, image, pdfmerge
+import os, sys, shutil, platform, json, argparse, glob, contextlib
+import bom, image, pdfmerge, bundle
 
-SCRIPT_VERSION = "v1.17"
+SCRIPT_VERSION = "v1.24"
 KICAD_VERSION = "9.0"
 
 if platform.platform().startswith("Windows"):
@@ -49,6 +49,16 @@ def clean_directory(dir: str):
     if (os.path.exists(dir)):
         shutil.rmtree(dir)
     os.makedirs(dir)
+
+@contextlib.contextmanager
+def temp_directory(base: str, name: str = "tmp", preserve: bool = False):
+    path = os.path.join(base, name)
+    os.makedirs(path, exist_ok=True)
+    try:
+        yield path
+    finally:
+        if not preserve:
+            shutil.rmtree(path)
 
 def report_errors(title: str, errors: list[dict[str, str]]) -> dict[str, int]:
     groups = {}
@@ -205,97 +215,188 @@ def export_pcb_ibom(input_pcb: str, output_file: str, dnf_list: list[str] = []):
         "--blacklist", ",".join(dnf_list)
     ], silent=True)
 
-def export_pcb_image(input_pcb: str, output_file: str):
+def export_pcb_image(input_pcb: str, output_file: str, side: str = "top", zoom: float = 0.9, resolution: int = 2000):
+    resolution = [str(resolution), str(resolution)]
     run_command([
         KICAD_CLI, "pcb", "render",
         input_pcb,
         "--output", output_file,
         "--quality", "user",
         "--perspective",
-        "--zoom", "0.9",
-        "--width", "2000",
-        "--height", "2000",
+        "--zoom", f"{zoom:.2f}",
+        "--width", resolution[0],
+        "--height", resolution[1],
         "--background", "transparent",
+        "--side", side,
     ])
     image.crop_image(output_file, output_file)
+
+def export_pcb_gif(input_pcb: str, output_file: str, direction: str = "left", zoom: float = 0.7, framerate: int = 20, duration: float = 3.0, resolution: int = 640):
+
+    rotate_str = {
+        "up":       lambda a: f"{-a:.03f},0,0",
+        "down":     lambda a: f"{a:.03f},0,0",
+        "left":     lambda a: f"0,{a:.03f},0",
+        "right":    lambda a: f"0,{-a:.03f},0",
+    }[direction]
+
+    frames = int(duration * framerate)
+    resolution = [str(resolution), str(resolution)]
+
+    with temp_directory(os.path.dirname(output_file), "gif-tmp") as tmpdir:
+        images = []
+        for f in range(frames):
+            angle = 360.0 * f / frames
+            path = os.path.join(tmpdir, f"{f:04d}.png")
+            images.append(path)
+            run_command([
+                KICAD_CLI, "pcb", "render",
+                input_pcb,
+                "--output", path,
+                "--quality", "user",
+                "--perspective",
+                "--zoom", f"{zoom:.2f}",
+                "--width", resolution[0],
+                "--height", resolution[1],
+                "--background", "transparent",
+                "--side", "top",
+                "--rotate", rotate_str(angle)
+            ])
+        
+        image.make_gif(images, output_file, framerate)
 
 def export_pcb_drawings(input_pcb: str, output_file: str, layers: int):
 
     if not pdfmerge.get_backend():
-        print_color("No PDF merging backend available. Skipping PCB drawings", "w")
+        print_color("No PDF merging backend available. Skipping PCB drawings", "y")
         return
 
-    tmpdir = os.path.join(os.path.dirname(output_file), "pdf-tmp")
-    os.makedirs(tmpdir, exist_ok=True)
+    with temp_directory(os.path.dirname(output_file), "pdf-tmp") as tmpdir:
+        plots = [
+            {
+                "name": "Top Fabrication",
+                "layers": ["F.Fab", "Edge.Cuts"],
+            },
+            {
+                "name": "Bottom Fabrication",
+                "layers": ["B.Fab", "Edge.Cuts"],
+            },
+            {
+                "name": "Top",
+                "layers": ["F.Cu", "F.Paste", "F.SilkS", "Edge.Cuts"],
+            },
+            {
+                "name": "Bottom",
+                "layers": ["B.Cu", "B.Paste", "B.SilkS", "Edge.Cuts"],
+            },
+        ]
 
-    plots = [
-        {
-            "name": "Top Fabrication",
-            "layers": ["F.Fab", "Edge.Cuts"],
-        },
-        {
-            "name": "Bottom Fabrication",
-            "layers": ["B.Fab", "Edge.Cuts"],
-        },
-        {
-            "name": "Top",
-            "layers": ["F.Cu", "F.Paste", "F.SilkS", "Edge.Cuts"],
-        },
-        {
-            "name": "Bottom",
-            "layers": ["B.Cu", "B.Paste", "B.SilkS", "Edge.Cuts"],
-        },
-    ]
+        if layers > 2:
+            # Put the internal layers between the top and bottom layers
+            bottom = plots.pop(-1)
+            for i in range(layers - 2):
+                plots.append({
+                    "name": f"Inner Layer {i + 1}",
+                    "layers": [f"In{i + 1}.Cu", "Edge.Cuts"]
+                })
+            plots.append(bottom)
 
-    if layers > 2:
-        # Put the internal layers between the top and bottom layers
-        bottom = plots.pop(-1)
-        for i in range(layers - 2):
-            plots.append({
-                "name": f"Inner Layer {i + 1}",
-                "layers": [f"In{i + 1}.Cu", "Edge.Cuts"]
-            })
-        plots.append(bottom)
+        for plot in plots:
+            result = run_command([
+                KICAD_CLI, "pcb", "export", "pdf",
+                input_pcb,
+                "--layers", plot["layers"][0],
+                "--common-layers", ",".join(plot["layers"][1:]),
+                "--output", tmpdir,
+                "--include-border-title",
+                "--drill-shape-opt", "2",
+                "--define-var", f"LAYER_NAME={plot['name']}",
+                "--mode-separate",
+            ])
+            # Result format: "Plotted to 'outputs/pdf-tmp/pcb_name-F_Fab.pdf'."
+            plot["filename"] = result.split("'")[-2]
 
-    for plot in plots:
-        result = run_command([
-            KICAD_CLI, "pcb", "export", "pdf",
-            input_pcb,
-            "--layers", plot["layers"][0],
-            "--common-layers", ",".join(plot["layers"][1:]),
-            "--output", tmpdir,
-            "--include-border-title",
-            "--drill-shape-opt", "2",
-            "--define-var", f"LAYER_NAME={plot['name']}",
-            "--mode-multipage",
+        pages = [ plot["filename"] for plot in plots ]
+        pdfmerge.merge_pdf(pages, output_file)
+
+def run_git_check() -> str:
+    if not shutil.which("git"):
+        print_color("Git not found. Skipping git check.", "y")
+        return None
+
+    try:
+        output = run_command(["git", "status"], silent=True)
+    except subprocess.CalledProcessError:
+        print_color("Not a git repository.", "y")
+        return None
+    
+    git_commit = run_command(["git", "rev-parse", "--short", "HEAD"], silent=True)
+
+    if not "nothing to commit, working tree clean" in output:
+        print_color("Git repository has uncommitted changes.", "y")
+    else:
+        print(f"Git commit: {git_commit}")
+
+    return git_commit
+
+def zip_files(input_path: str, output_file: str, files: list[str] = None):
+    bundle.bundle(input_path, output_file, files)
+
+def zip_release_pack(input_path: str, output_file: str, format: str):
+    if format == "jlc":
+        zip_files(input_path, output_file, [
+            "Assembly",
+            "Gerber",
+            "NC Drill",
         ])
-        # Result format: "Plotted to 'outputs/pdf-tmp/pcb_name-F_Fab.pdf'."
-        plot["filename"] = result.split("'")[-2]
+    else:
+        raise ValueError(f"Unknown release format: {format}.")
 
-    pages = [ plot["filename"] for plot in plots ]
-    pdfmerge.merge_pdf(pages, output_file)
-    shutil.rmtree(tmpdir)
-
-def zip_files(input_path: str, output_file: str):
-    run_command([
-        "tar",
-        "-C", input_path,
-        "-acf", output_file,
-    ] + os.listdir(input_path)
-    )
+def glob_single(input_pattern: str) -> str:
+    files = glob.glob(input_pattern)
+    if len(files) == 0:
+        raise FileNotFoundError(f"No files match \"{input_pattern}\"")
+    if len(files) > 1:
+        raise ValueError(f"Multiple files match \"{input_pattern}\".")
+    return files[0]
 
 if __name__ == "__main__":
-    BOARD_NAME = sys.argv[1]
-    BOARD_LAYERS = int(sys.argv[2])
 
-    INPUT_SCH = BOARD_NAME + ".kicad_sch"
-    INPUT_PCB = BOARD_NAME + ".kicad_pcb"
-    OUTPUT_DIR = "outputs"
-    OUTPUT_NAME = BOARD_NAME
+    sys.argv[-1] = sys.argv[-1].strip()  # Remove trailing carriage return for *nix/win compat.
+    argparser = argparse.ArgumentParser(description="Output generator for kicad projects")
+    argparser.add_argument("--input", "-i", type=str, help="Kicad project", default="*.kicad_pro")
+    argparser.add_argument("--layers", "-l", type=int, help="Number of layers in the PCB design.", default=2)
+    argparser.add_argument("--output", "-o", type=str, help="Output directory", default="outputs")
+    argparser.add_argument("--render-side", type=str, help="Side of the board to render.", default="top", choices=["top", "bottom", "left", "right", "front", "back"])
+    argparser.add_argument("--render-zoom", type=float, help="Zoom used for rendering.", default=0.9)
+    argparser.add_argument("--render-resolution", type=int, help="Render resolution (before cropping)", default=2000)
+    argparser.add_argument("--gif", action="store_true", help="Enables gif generation")
+    argparser.add_argument("--gif-zoom", type=float, help="Zoom used for gif rendering.", default=0.7)
+    argparser.add_argument("--gif-duration", type=float, help="Duration of the gif in seconds.", default=3.0)
+    argparser.add_argument("--gif-framerate", type=int, help="Framerate of the gif.", default=20)
+    argparser.add_argument("--gif-resolution", type=int, help="Gif resolution (before cropping)", default=640)
+    argparser.add_argument("--gif-direction", type=str, help="Rotation direction of the gif", default="left", choices=["up", "down", "left", "right"])
+    argparser.add_argument("--name", type=str, help="Output name", default=None)
+    argparser.add_argument("--wait-on-done", action="store_true", help="Wait to hold the terminal open when done.")
+    argparser.add_argument("--format", type=str, help="Manufacturer specific output options", default=None, choices=["jlc"])
+    argparser.add_argument("--compression", type=str, help="Compression format", default="zip", choices=bundle.SUPPORTED_FORMATS)
+    args = argparser.parse_args()
+
+    # Strip file extention
+    input_file = glob_single(args.input)
+    input_file = os.path.splitext(input_file)[0]
+    
+    INPUT_SCH = input_file + ".kicad_sch"
+    INPUT_PCB = input_file + ".kicad_pcb"
+    OUTPUT_DIR = args.output
+    OUTPUT_NAME = args.name if args.name else os.path.basename(input_file)
 
     print("Running output generator {}".format(SCRIPT_VERSION))
 
     clean_directory(OUTPUT_DIR)
+
+    print("Checking git status")
+    run_git_check()
 
     print("Running schematic ERC")
     run_sch_erc(INPUT_SCH, OUTPUT_DIR)
@@ -313,7 +414,7 @@ if __name__ == "__main__":
     export_pcb_ibom(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".ibom.html"), dnf_list)
 
     print("Generating gerbers")
-    export_pcb_gerbers(INPUT_PCB, os.path.join(OUTPUT_DIR, "Gerber"), get_layer_names(BOARD_LAYERS))
+    export_pcb_gerbers(INPUT_PCB, os.path.join(OUTPUT_DIR, "Gerber"), get_layer_names(args.layers))
 
     print("Generating drill reports")
     export_pcb_ncdrill(INPUT_PCB, os.path.join(OUTPUT_DIR, "NC Drill"))
@@ -322,15 +423,35 @@ if __name__ == "__main__":
     export_pcb_pos(INPUT_PCB, os.path.join(OUTPUT_DIR, "Assembly", OUTPUT_NAME + ".pos.csv"))
 
     print("Generating PCB drawings")
-    export_pcb_drawings(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".drawings.pdf"), BOARD_LAYERS)
+    export_pcb_drawings(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".drawings.pdf"), args.layers)
 
     print("Generating PCB render")
-    export_pcb_image(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".png"))
+    export_pcb_image(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".png"),
+            side = args.render_side,
+            zoom = args.render_zoom,
+            resolution = args.render_resolution
+        )
+
+    if args.gif:
+        print("Generating PCB gif")
+        export_pcb_gif(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".gif"),
+            direction = args.gif_direction,
+            zoom = args.gif_zoom,
+            framerate = args.gif_framerate,
+            duration = args.gif_duration,
+            resolution = args.gif_resolution
+        )
 
     print("Generating step file")
     export_pcb_step(INPUT_PCB, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".step"))
 
-    print("Generating zip file")
-    zip_files(OUTPUT_DIR, os.path.join(OUTPUT_DIR, OUTPUT_NAME + ".zip"))
+    print(f"Generating {args.compression} file")
+    zip_files(OUTPUT_DIR, os.path.join(OUTPUT_DIR, f"{OUTPUT_NAME}.{args.compression}"))
 
-    input("Done")
+    if args.format != None:
+        print(f"Generating {args.format} release pack")
+        zip_release_pack(OUTPUT_DIR, os.path.join(OUTPUT_DIR, f"{OUTPUT_NAME}.{args.format}.{args.compression}"), args.format)
+
+    print("Done!")
+    if args.wait_on_done:
+        input("Press enter to exit...")

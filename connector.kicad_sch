@@ -6,8 +6,8 @@
 	(paper "A4")
 	(title_block
 		(title "Winglet BG95")
-		(date "2025-06-05")
-		(rev "v1.1")
+		(date "2025-09-29")
+		(rev "v1.1b")
 		(company "TL Embedded")
 	)
 	(lib_symbols

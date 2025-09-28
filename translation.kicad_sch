@@ -6,8 +6,8 @@
 	(paper "A4")
 	(title_block
 		(title "Winglet BG95")
-		(date "2025-06-05")
-		(rev "v1.1")
+		(date "2025-09-29")
+		(rev "v1.1b")
 		(company "TL Embedded")
 	)
 	(lib_symbols
@@ -2405,7 +2405,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "83ce29fb-863e-4d46-aed2-ec3c8f110727")
 		(property "Reference" "R2"
 			(at 71.12 51.435 0)
@@ -2986,7 +2986,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c779d3e0-a4fb-4dc1-8a50-a6ac8dcd6850")
 		(property "Reference" "Q1"
